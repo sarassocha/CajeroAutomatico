@@ -11,6 +11,6 @@ public class Operacionconsultasaldo implements Operacion {
  
     @Override
     public String ejecutar(Cuenta cuenta) {
-        return "Titular: " + cuenta.getTitular().getNombre() + " - Saldo: $" + cuenta.getSaldo();
+        return "Titular: " + cuenta.getTitular().getNombre() + " - Saldo: $" + formatearMonto(cuenta.getSaldo());
     }
 }
