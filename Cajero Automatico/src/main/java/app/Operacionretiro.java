@@ -18,23 +18,21 @@ public class Operacionretiro implements Operacion {
         return "Retirar dinero";
     }
 
-    @Override
-    public String ejecutar(Cuenta cuenta) {
+    public String ejecutar(Tarjeta tarjeta) {
 
-        if (cuenta.retirar(monto)) {
+        if (tarjeta.retirar(monto)) {
             String mensaje = "Retiro exitoso por: $" + monto + " ¿Desea imprimir su recibo?";
-            java.awt.EventQueue.invokeLater(() -> new JPaneExito(mensaje, cuenta).setVisible(true));
+            java.awt.EventQueue.invokeLater(() -> new JPaneExito(mensaje, tarjeta).setVisible(true));
             return mensaje;
         }
 
         String mensajeError;
 
-        // Validaciones exactas basadas en los criterios de tu clase Cuenta
         if (monto <= 0) {
             mensajeError = "Monto inválido: Ingrese una cantidad mayor a cero.";
-        } else if (monto > cuenta.getSaldo()) {
-            mensajeError = "Fondos insuficientes: La cuenta no tiene saldo disponible para este retiro.";
-        } else if ((cuenta.getRetiradoHoy() + monto) > cuenta.getLimiteDiario()) {
+        } else if (monto > tarjeta.getSaldo()) {
+            mensajeError = "Fondos insuficientes: La tarjeta no tiene saldo disponible para este retiro.";
+        } else if ((tarjeta.getRetiradoHoy() + monto) > tarjeta.getLimiteDiario()) {
             mensajeError = "Límite diario superado: Ha alcanzado o superado el límite de retiros permitidos para hoy.";
         } else {
             mensajeError = "No se pudo realizar la transacción.";
@@ -43,5 +41,4 @@ public class Operacionretiro implements Operacion {
         java.awt.EventQueue.invokeLater(() -> new JPaneErrores(mensajeError).setVisible(true));
         return mensajeError;
     }
-
 }

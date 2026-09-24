@@ -3,12 +3,21 @@ package app;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Representa la entidad bancaria que gestiona clientes, cuentas y tarjetas
+ * asociadas.
+ */
 public class Banco {
 
     private String nombre;
     private List<Cliente> clientes = new ArrayList<>();
     private List<Cuenta> cuentas = new ArrayList<>();
 
+    /**
+     * Construye una nueva instancia de Banco.
+     *
+     * @param nombre El nombre del banco.
+     */
     public Banco(String nombre) {
         this.nombre = nombre;
     }
@@ -29,23 +38,58 @@ public class Banco {
         return cuentas;
     }
 
-    public Cuenta buscarCuentaPorTarjeta(String numeroTarjeta) {
+    /**
+     * Busca y retorna la tarjeta asociada al número provisto.
+     *
+     * @param numeroTarjeta El número identificador de la tarjeta.
+     * @return El objeto Tarjeta encontrado o null si no existe.
+     */
+    public Tarjeta buscarTarjetaPorNumero(String numeroTarjeta) {
+        if (numeroTarjeta == null) {
+            return null;
+        }
         for (Cuenta cuenta : cuentas) {
-            Tarjeta tarjeta = cuenta.getTarjeta();
-            if (tarjeta != null && tarjeta.getNumero().equals(numeroTarjeta)) {
-                return cuenta;
+            if (cuenta.getTarjetas() != null) {
+                for (Tarjeta tarjeta : cuenta.getTarjetas()) {
+                    if (tarjeta.getNumero().equals(numeroTarjeta)) {
+                        return tarjeta;
+                    }
+                }
             }
         }
         return null;
     }
 
-    public Cliente buscarClientePorTarjeta(String numeroTarjeta) {
+    /**
+     * Busca la cuenta bancaria a la que pertenece la tarjeta dada.
+     *
+     * @param numeroTarjeta El número de la tarjeta.
+     * @return La cuenta asociada o null si no se encuentra.
+     */
+    public Cuenta buscarCuentaPorTarjeta(String numeroTarjeta) {
+        if (numeroTarjeta == null) {
+            return null;
+        }
         for (Cuenta cuenta : cuentas) {
-            Tarjeta tarjeta = cuenta.getTarjeta();
-            if (tarjeta != null && tarjeta.getNumero().equals(numeroTarjeta)) {
-                return cuenta.getTitular();
+            if (cuenta.getTarjetas() != null) {
+                for (Tarjeta tarjeta : cuenta.getTarjetas()) {
+                    if (tarjeta.getNumero().equals(numeroTarjeta)) {
+                        return cuenta;
+                    }
+                }
             }
         }
         return null;
+    }
+
+    /**
+     * Busca el cliente titular de la cuenta asociada a la tarjeta dada.
+     *
+     * @param numeroTarjeta El número de la tarjeta.
+     * @return El cliente titular o null si no existe.
+     */
+    public Cliente buscarClientePorTarjeta(String numeroTarjeta) {
+        Cuenta cuenta = buscarCuentaPorTarjeta(numeroTarjeta);
+        return (cuenta != null) ? cuenta.getTitular() : null;
     }
 }

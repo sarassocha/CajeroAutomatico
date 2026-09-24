@@ -13,6 +13,8 @@ public class VistaUsuario extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VistaUsuario.class.getName());
     private Banco banco;
     private Cajeroautomatico cajero;
+    private Cliente ana;
+    private Cliente luis;
 
     /**
      * Creates new form VistaUsuario
@@ -24,21 +26,23 @@ public class VistaUsuario extends javax.swing.JFrame {
 
     private void inicializarSistema() {
         banco = new Banco("Banco Demo");
-        Cliente ana = new Cliente("Ana Perez", "1001");
-        Cliente luis = new Cliente("Luis Gomez", "1002");
+        ana = new Cliente("Ana Perez", "1001");
+        luis = new Cliente("Luis Gomez", "1002");
         banco.agregarCliente(ana);
         banco.agregarCliente(luis);
 
-        Cuenta cuenta1 = new Cuenta("C001", ana, 500000, 400000);
-        cuenta1.asignarTarjeta(new Tarjeta("1111", "1234"));
-        banco.agregarCuenta(cuenta1);
+        // Ana y Luis comparten la misma cuenta
+        Cuenta cuentaCompartida = new Cuenta("C001", ana, 500000, 400000);
 
-        Cuenta cuenta2 = new Cuenta("C002", ana, 1000000, 500000);
-        banco.agregarCuenta(cuenta2);
+        // Agregar a Luis como co-titular de la cuenta
+        cuentaCompartida.agregarTitular(luis);
 
-        Cuenta cuenta3 = new Cuenta("C003", luis, 200000, 200000);
-        cuenta3.asignarTarjeta(new Tarjeta("2222", "4321"));
-        banco.agregarCuenta(cuenta3);
+        // Ana tiene 3 tarjetas para la cuenta compartida
+        cuentaCompartida.asignarTarjeta(new Tarjeta("1111", "1234", ana, 100000, 10000000));
+        cuentaCompartida.asignarTarjeta(new Tarjeta("3333", "5678", ana));
+        cuentaCompartida.asignarTarjeta(new Tarjeta("5555", "9012", luis, 10000000, 10000000));
+
+        banco.agregarCuenta(cuentaCompartida);
 
         cajero = new Cajeroautomatico(banco, 2000000);
     }
@@ -127,14 +131,14 @@ public class VistaUsuario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Cliente ana = banco.buscarClientePorTarjeta("1111");
-        java.awt.EventQueue.invokeLater(() -> new VistaTarjeta(ana).setVisible(true));
+
+        java.awt.EventQueue.invokeLater(() -> new VistaTarjeta(cajero, ana).setVisible(true));
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Cliente luis = banco.buscarClientePorTarjeta("2222");
-        java.awt.EventQueue.invokeLater(() -> new VistaTarjeta(luis).setVisible(true));
+
+        java.awt.EventQueue.invokeLater(() -> new VistaTarjeta(cajero, luis).setVisible(true));
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 

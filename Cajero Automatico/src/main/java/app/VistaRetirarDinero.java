@@ -18,6 +18,7 @@ public class VistaRetirarDinero extends javax.swing.JFrame {
     private Operacionretiro operacionretiro;
     private String numeroTarjeta;
     private String mensaje;
+    private Tarjeta tarjeta;
 
     /**
      * Creates new form VistaRetirarDinero
@@ -27,6 +28,7 @@ public class VistaRetirarDinero extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.cajero = cajero;
         this.numeroTarjeta = numeroTarjeta;
+        this.tarjeta = cajero.getBanco().buscarTarjetaPorNumero(numeroTarjeta);
     }
 
     public VistaRetirarDinero() {
@@ -131,7 +133,7 @@ public class VistaRetirarDinero extends javax.swing.JFrame {
             return;
         }
 
-        mensaje = operacionretiro.ejecutar(cuenta);
+        mensaje = operacionretiro.ejecutar(tarjeta);
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -164,10 +166,19 @@ public class VistaRetirarDinero extends javax.swing.JFrame {
         /* Create and display the form */
         Banco bancoPrueba = new Banco("Banco Demo");
         Cliente ana = new Cliente("Ana Perez", "1001");
+        Cliente luis = new Cliente("Luis Gomez", "1002");
         bancoPrueba.agregarCliente(ana);
-        Cuenta cuentaPrueba = new Cuenta("C001", ana, 500000, 400000);
-        cuentaPrueba.asignarTarjeta(new Tarjeta("1111", "1234"));
-        bancoPrueba.agregarCuenta(cuentaPrueba);
+        bancoPrueba.agregarCliente(luis);
+
+        Cuenta cuentaCompartida = new Cuenta("C001", ana, 500000, 400000);
+
+        cuentaCompartida.agregarTitular(luis);
+
+        cuentaCompartida.asignarTarjeta(new Tarjeta("1111", "1234", ana));
+        cuentaCompartida.asignarTarjeta(new Tarjeta("3333", "5678", ana));
+        cuentaCompartida.asignarTarjeta(new Tarjeta("5555", "9012", luis));
+
+        bancoPrueba.agregarCuenta(cuentaCompartida);
         Cajeroautomatico cajeroPrueba = new Cajeroautomatico(bancoPrueba, 2000000);
 
         java.awt.EventQueue.invokeLater(() -> new VistaRetirarDinero(cajeroPrueba, "1111").setVisible(true));

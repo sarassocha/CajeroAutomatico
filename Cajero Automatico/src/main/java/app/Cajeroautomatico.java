@@ -1,6 +1,9 @@
 package app;
+
 import javax.swing.JOptionPane;
+
 public class Cajeroautomatico {
+
     private Banco banco;
     private double saldoEfectivoInterno;
     private boolean bloqueadoPorEfectivo;
@@ -10,14 +13,34 @@ public class Cajeroautomatico {
         this.saldoEfectivoInterno = saldoInicialEfectivo;
         this.bloqueadoPorEfectivo = (saldoInicialEfectivo <= 0);
     }
-    
 
-    
     public Cuenta buscarCuentaPorTarjeta(String numeroTarjeta) {
         return banco.buscarCuentaPorTarjeta(numeroTarjeta);
     }
-    
-public String realizarOperacion(String numeroTarjeta, String clave, Operacion operacion) {
+
+    public Tarjeta buscarTarjetaEnCuenta(Cuenta cuenta, String numeroTarjeta) {
+        for (Tarjeta tarjeta : cuenta.getTarjetas()) {
+            if (tarjeta.getNumero().equals(numeroTarjeta)) {
+                return tarjeta;
+            }
+        }
+        return null;
+    }
+
+    public Banco getBanco() {
+        return banco;
+    }
+
+    /**
+     * Establece o actualiza el banco asociado al cajero automático.
+     *
+     * @param banco El nuevo objeto Banco a vincular.
+     */
+    public void setBanco(Banco banco) {
+        this.banco = banco;
+    }
+
+    public String realizarOperacion(String numeroTarjeta, String clave, Operacion operacion) {
         if (bloqueadoPorEfectivo) {
             return "Cajero fuera de servicio: No hay efectivo disponible en la máquina.";
         }
@@ -27,7 +50,11 @@ public String realizarOperacion(String numeroTarjeta, String clave, Operacion op
             return "Tarjeta no reconocida";
         }
 
-        Tarjeta tarjeta = cuenta.getTarjeta();
+        Tarjeta tarjeta = buscarTarjetaEnCuenta(cuenta, numeroTarjeta);
+        if (tarjeta == null) {
+            return "Tarjeta no encontrada en la cuenta";
+        }
+
         if (tarjeta.isBloqueada()) {
             return "Tarjeta bloqueada";
         }
@@ -43,7 +70,7 @@ public String realizarOperacion(String numeroTarjeta, String clave, Operacion op
             return "Retiro rechazado. El cajero no tiene efectivo suficiente.";
         }
 
-        String resultado = operacion.ejecutar(cuenta);
+        String resultado = operacion.ejecutar(tarjeta);
 
         if (operacion.getMonto() > 0) {
             dispensarEfectivo(operacion.getMonto());
@@ -51,19 +78,19 @@ public String realizarOperacion(String numeroTarjeta, String clave, Operacion op
 
         // recibo
         int opcion = JOptionPane.showConfirmDialog(
-            null, 
-            "¿Desea imprimir el recibo de la transacción?", 
-            "Impresión de Recibo", 
-            JOptionPane.YES_NO_OPTION, 
-            JOptionPane.QUESTION_MESSAGE
+                null,
+                "¿Desea imprimir el recibo de la transacción?",
+                "Impresión de Recibo",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
         );
 
         if (opcion == JOptionPane.YES_OPTION) {
             JOptionPane.showMessageDialog(
-                null, 
-                "--- RECIBO DE TRANSACCIÓN ---\n" + resultado, 
-                "Recibo Impreso", 
-                JOptionPane.INFORMATION_MESSAGE
+                    null,
+                    "--- RECIBO DE TRANSACCIÓN ---\n" + resultado,
+                    "Recibo Impreso",
+                    JOptionPane.INFORMATION_MESSAGE
             );
         }
         // --------------------------------------
@@ -71,7 +98,6 @@ public String realizarOperacion(String numeroTarjeta, String clave, Operacion op
         return resultado;
     }
 // fin recibo xd
-
 
     public boolean estaBloqueadoPorEfectivo() {
         return bloqueadoPorEfectivo;

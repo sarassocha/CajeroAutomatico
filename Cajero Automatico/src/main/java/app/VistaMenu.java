@@ -1,61 +1,60 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package app;
 
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.WindowConstants;
+
 /**
- *
- * @author USER
+ * Vista del menú principal para seleccionar operaciones del cajero automático.
  */
-public class VistaMenu extends javax.swing.JFrame {
+public class VistaMenu extends JFrame {
 
-    private Banco banco;
-    private Cajeroautomatico cajero;
-    private String numeroTarjeta;
+    private static final Logger LOGGER = Logger.getLogger(VistaMenu.class.getName());
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VistaMenu.class.getName());
+    private final Cajeroautomatico cajero;
+    private final String numeroTarjeta;
+    private final Cliente cliente;
 
     /**
-     * Creates new form Vista
+     * Constructor principal con inyección de sesión completa.
      */
-    public VistaMenu(Cajeroautomatico cajero, String numeroTarjeta) {
+    public VistaMenu(Cajeroautomatico cajero, String numeroTarjeta, Cliente cliente) {
         initComponents();
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
         this.cajero = cajero;
         this.numeroTarjeta = numeroTarjeta;
+        this.cliente = cliente;
     }
 
+    /**
+     * Constructor secundario de conveniencia si solo se dispone del número de
+     * tarjeta.
+     */
+    public VistaMenu(Cajeroautomatico cajero, String numeroTarjeta) {
+        this(cajero, numeroTarjeta, null);
+    }
+
+    /**
+     * Constructor por defecto para soporte de diseñador GUI (NetBeans UI
+     * Builder).
+     */
+    @Deprecated
     public VistaMenu() {
         initComponents();
-        inicializarSistema();
-        this.numeroTarjeta = "1111";
-    }
-
-    private void inicializarSistema() {
-        banco = new Banco("Banco Demo");
-        Cliente ana = new Cliente("Ana Perez", "1001");
-        Cliente luis = new Cliente("Luis Gomez", "1002");
-        banco.agregarCliente(ana);
-        banco.agregarCliente(luis);
-
-        Cuenta cuenta1 = new Cuenta("C001", ana, 500000, 400000);
-        cuenta1.asignarTarjeta(new Tarjeta("1111", "1234"));
-        banco.agregarCuenta(cuenta1);
-
-        Cuenta cuenta2 = new Cuenta("C002", ana, 1000000, 500000);
-        banco.agregarCuenta(cuenta2);
-
-        Cuenta cuenta3 = new Cuenta("C003", luis, 200000, 200000);
-        cuenta3.asignarTarjeta(new Tarjeta("2222", "4321"));
-        banco.agregarCuenta(cuenta3);
-
-        cajero = new Cajeroautomatico(banco, 200000);
-        actualizarEstadoInterfaz();
+        setLocationRelativeTo(null);
+        this.cajero = null;
+        this.numeroTarjeta = "";
+        this.cliente = null;
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
 
         jButton2 = new javax.swing.JButton();
@@ -64,7 +63,8 @@ public class VistaMenu extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Menú Principal - Cajero");
 
         jButton2.setText("Retirar dinero");
         jButton2.addActionListener(this::jButton2ActionPerformed);
@@ -84,83 +84,116 @@ public class VistaMenu extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(86, 86, 86)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton4))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(jLabel4)))
-                .addContainerGap(86, Short.MAX_VALUE))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(86, 86, 86)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 125,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout
+                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 125,
+                                                        Short.MAX_VALUE))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(23, 23, 23)
+                                                .addComponent(jLabel4)))
+                                .addContainerGap(86, Short.MAX_VALUE)));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jLabel4)
-                .addGap(18, 18, 18)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addContainerGap(34, Short.MAX_VALUE))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(25, 25, 25)
+                                .addComponent(jLabel4)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 23,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton1)
+                                .addContainerGap(34, Short.MAX_VALUE)));
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>
 
-    private void actualizarEstadoInterfaz() {
-
+    private void jButton3ActionPerformed(ActionEvent evt) {
+        if (!validarSesion()) {
+            return;
+        }
+        EventQueue.invokeLater(() -> new VistaIngresarDinero(cajero, numeroTarjeta).setVisible(true));
+        this.dispose();
     }
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        java.awt.EventQueue.invokeLater(() -> new VistaRetirarDinero(cajero, numeroTarjeta).setVisible(true));
+    private void jButton2ActionPerformed(ActionEvent evt) {
+        if (!validarSesion()) {
+            return;
+        }
+        EventQueue.invokeLater(() -> new VistaRetirarDinero(cajero, numeroTarjeta).setVisible(true));
         this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        java.awt.EventQueue.invokeLater(() -> new VistaIngresarDinero(cajero, numeroTarjeta).setVisible(true));
+    private void jButton4ActionPerformed(ActionEvent evt) {
+        if (!validarSesion()) {
+            return;
+        }
+        EventQueue.invokeLater(() -> new VistaBoletas(cajero, numeroTarjeta).setVisible(true));
         this.dispose();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        java.awt.EventQueue.invokeLater(() -> new VistaBoletas(cajero, numeroTarjeta).setVisible(true));
+    private void jButton1ActionPerformed(ActionEvent evt) {
+        Tarjeta tarjetaActual = (cajero != null) ? cajero.getBanco().buscarTarjetaPorNumero(numeroTarjeta) : null;
+        JOptionPane.showMessageDialog(
+                null,
+                "Sesión finalizada correctamente. Por favor retire su tarjeta.",
+                "Información",
+                JOptionPane.INFORMATION_MESSAGE);
+        EventQueue.invokeLater(() -> new VistaTarjeta(cajero, cliente).setVisible(true));
         this.dispose();
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private boolean validarSesion() {
+        if (cajero == null || numeroTarjeta == null || numeroTarjeta.trim().isEmpty()) {
+            mostrarMensajeError("Error: Sesión no válida o tiempo expirado. Ingrese su tarjeta de nuevo.");
+            EventQueue.invokeLater(() -> new VistaTarjeta(cajero, cliente).setVisible(true));
+            this.dispose();
+            return false;
+        }
+        return true;
+    }
 
-    public static void main(String args[]) {
+    private void mostrarMensajeError(String mensaje) {
+        java.awt.EventQueue.invokeLater(() -> new JPaneErrores(mensaje).setVisible(true));
+    }
 
+    private void mostrarMensajeExito(String mensaje, Tarjeta tarjeta) {
+        java.awt.EventQueue.invokeLater(() -> new JPaneExito(mensaje, tarjeta).setVisible(true));
+    }
+
+    public static void main(String[] args) {
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "Error al configurar el LookAndFeel", ex);
         }
 
-        java.awt.EventQueue.invokeLater(() -> new VistaMenu().setVisible(true));
+        EventQueue.invokeLater(() -> new VistaMenu().setVisible(true));
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel4;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration
 }

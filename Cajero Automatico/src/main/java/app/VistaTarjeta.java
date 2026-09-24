@@ -16,42 +16,22 @@ public class VistaTarjeta extends javax.swing.JFrame {
             .getLogger(VistaTarjeta.class.getName());
     private Banco banco;
     private Cajeroautomatico cajero;
-    private Cliente cliente; // Recoge el cliente actual
+    private Cliente clienteActual;
 
     /**
      * Creates new form VistaTarjeta
      */
-    public VistaTarjeta(Cliente cliente) {
+    public VistaTarjeta(Cajeroautomatico cajero, Cliente cliente) {
         initComponents();
-        inicializarSistema();
-        this.cliente = cliente;
+        this.cajero = cajero;
+        this.clienteActual = cliente;
+        if (this.clienteActual != null) {
+            setTitle("Tarjetas de " + clienteActual.getNombre());
+        }
     }
 
-    // Constructor vacío por seguridad si se llega a instanciar sin parámetros
     public VistaTarjeta() {
         initComponents();
-        inicializarSistema();
-    }
-
-    private void inicializarSistema() {
-        banco = new Banco("Banco Demo");
-        Cliente ana = new Cliente("Ana Perez", "1001");
-        Cliente luis = new Cliente("Luis Gomez", "1002");
-        banco.agregarCliente(ana);
-        banco.agregarCliente(luis);
-
-        Cuenta cuenta1 = new Cuenta("C001", ana, 500000, 4000000);
-        cuenta1.asignarTarjeta(new Tarjeta("1111", "1234"));
-        banco.agregarCuenta(cuenta1);
-
-        Cuenta cuenta2 = new Cuenta("C002", ana, 1000000, 5000000);
-        banco.agregarCuenta(cuenta2);
-
-        Cuenta cuenta3 = new Cuenta("C003", luis, 200000, 2000000);
-        cuenta3.asignarTarjeta(new Tarjeta("2222", "4321"));
-        banco.agregarCuenta(cuenta3);
-
-        cajero = new Cajeroautomatico(banco, 2000000);
     }
 
     /**
@@ -152,19 +132,31 @@ public class VistaTarjeta extends javax.swing.JFrame {
 
         Cuenta cuentaEncontrada = cajero.buscarCuentaPorTarjeta(numeroIngresado);
 
-        if (cuentaEncontrada == null || cuentaEncontrada.getTarjeta() == null) {
+        if (cuentaEncontrada == null || !cuentaEncontrada.tieneTarjeta(numeroIngresado)) {
             java.awt.EventQueue.invokeLater(() -> new JPaneErrores("No existe dicha tarjeta.").setVisible(true));
             jTextField1.setText("");
             return;
         }
 
-        if (this.cliente != null && !cuentaEncontrada.getTitular().getDocumento().equals(this.cliente.getDocumento())) {
-            java.awt.EventQueue.invokeLater(() -> new JPaneErrores("Dicha tarjeta no pertenece al usuario.").setVisible(true));
-            jTextField1.setText("");
-            return;
+        if (this.clienteActual != null) {
+            Tarjeta tarjetaIngresada = null;
+            for (Tarjeta tarjeta : cuentaEncontrada.getTarjetas()) {
+                if (tarjeta.getNumero().equals(numeroIngresado)) {
+                    tarjetaIngresada = tarjeta;
+                    break;
+                }
+            }
+
+            if (tarjetaIngresada != null && !tarjetaIngresada.getPropietario().getDocumento().equals(this.clienteActual.getDocumento())) {
+                java.awt.EventQueue.invokeLater(() -> new JPaneErrores("Dicha tarjeta no pertenece al usuario.").setVisible(true));
+                jTextField1.setText("");
+                return;
+            }
         }
-        String numeroTarjeta = cuentaEncontrada.getTarjeta().getNumero();
-        java.awt.EventQueue.invokeLater(() -> new VistaClave(numeroTarjeta).setVisible(true));
+
+        String numeroTarjeta = numeroIngresado;
+        // Pasa tanto la tarjeta como el cajero o cliente a VistaClave para conservar el contexto
+        java.awt.EventQueue.invokeLater(() -> new VistaClave(cajero, numeroTarjeta).setVisible(true));
         this.dispose();
     }
 

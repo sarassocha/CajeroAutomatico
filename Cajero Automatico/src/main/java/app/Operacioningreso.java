@@ -1,6 +1,6 @@
 package app;
 
-public class Operacioningreso implements Operacion { // O implementando únicamente Operacion según tu interfaz
+public class Operacioningreso implements Operacion {
 
     private double monto;
 
@@ -18,8 +18,7 @@ public class Operacioningreso implements Operacion { // O implementando únicame
         return "Ingresar dinero";
     }
 
-    @Override
-    public String ejecutar(Cuenta cuenta) {
+    public String ejecutar(Tarjeta tarjeta) {
         if (!MontosPermitidos.esValido(monto, MontosPermitidos.CONSIGNACION)) {
             String mensaje = "Monto no válido. Las cantidades establecidas para consignación son: "
                     + MontosPermitidos.listar(MontosPermitidos.CONSIGNACION);
@@ -27,9 +26,9 @@ public class Operacioningreso implements Operacion { // O implementando únicame
             return mensaje;
         }
 
-        if (cuenta.ingresar(monto)) {
+        if (tarjeta.ingresar(monto)) {
             String mensaje = "Ingreso exitoso por: $" + monto + " ¿Desea imprimir su recibo?";
-            java.awt.EventQueue.invokeLater(() -> new JPaneExito(mensaje, cuenta).setVisible(true));
+            java.awt.EventQueue.invokeLater(() -> new JPaneExito(mensaje, tarjeta).setVisible(true));
             return mensaje;
         }
 

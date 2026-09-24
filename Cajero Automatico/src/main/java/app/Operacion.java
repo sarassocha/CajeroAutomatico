@@ -19,7 +19,7 @@ public interface Operacion {
 
     String getNombre();
 
-    String ejecutar(Cuenta cuenta);
+    String ejecutar(Tarjeta tarjeta);
 
 
     default String formatearMonto(double monto) {

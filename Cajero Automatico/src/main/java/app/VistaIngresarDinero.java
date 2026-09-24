@@ -16,6 +16,7 @@ public class VistaIngresarDinero extends javax.swing.JFrame {
     private Operacioningreso operacioningreso;
     private String numeroTarjeta;
     private String mensaje;
+    private Tarjeta tarjeta;
 
     /**
      * Creates new form VistaIngresarDinero
@@ -25,6 +26,7 @@ public class VistaIngresarDinero extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.cajero = cajero;
         this.numeroTarjeta = numeroTarjeta;
+        this.tarjeta = cajero.getBanco().buscarTarjetaPorNumero(numeroTarjeta);
     }
 
     public VistaIngresarDinero() {
@@ -121,14 +123,8 @@ public class VistaIngresarDinero extends javax.swing.JFrame {
         double monto = Double.parseDouble(montoSeleccionado);
 
         Operacioningreso operacioningreso = new Operacioningreso(monto);
-        Cuenta cuentaActual = cajero.buscarCuentaPorTarjeta(numeroTarjeta);
 
-        if (cuentaActual != null) {
-            mensaje = operacioningreso.ejecutar(cuentaActual);
-        } else {
-            String mensajeError = "Error: Cuenta no encontrada.";
-            java.awt.EventQueue.invokeLater(() -> new JPaneErrores(mensajeError).setVisible(true));
-        }
+        operacioningreso.ejecutar(tarjeta);
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -157,10 +153,22 @@ public class VistaIngresarDinero extends javax.swing.JFrame {
         /* Create and display the form */
         Banco bancoPrueba = new Banco("Banco Demo");
         Cliente ana = new Cliente("Ana Perez", "1001");
+        Cliente luis = new Cliente("Luis Gomez", "1002");
         bancoPrueba.agregarCliente(ana);
-        Cuenta cuentaPrueba = new Cuenta("C001", ana, 500000, 400000);
-        cuentaPrueba.asignarTarjeta(new Tarjeta("1111", "1234"));
-        bancoPrueba.agregarCuenta(cuentaPrueba);
+        bancoPrueba.agregarCliente(luis);
+
+        // Ana y Luis comparten la misma cuenta
+        Cuenta cuentaCompartida = new Cuenta("C001", ana, 500000, 400000);
+
+        // Agregar a Luis como co-titular de la cuenta
+        cuentaCompartida.agregarTitular(luis);
+
+        // Ana tiene 3 tarjetas para la cuenta compartida
+        cuentaCompartida.asignarTarjeta(new Tarjeta("1111", "1234", ana));
+        cuentaCompartida.asignarTarjeta(new Tarjeta("3333", "5678", ana));
+        cuentaCompartida.asignarTarjeta(new Tarjeta("5555", "9012", luis));
+
+        bancoPrueba.agregarCuenta(cuentaCompartida);
         Cajeroautomatico cajeroPrueba = new Cajeroautomatico(bancoPrueba, 2000000);
 
         java.awt.EventQueue.invokeLater(() -> new VistaIngresarDinero(cajeroPrueba, "1111").setVisible(true));
