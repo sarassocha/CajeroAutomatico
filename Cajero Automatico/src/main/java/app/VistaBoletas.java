@@ -207,7 +207,7 @@ public class VistaBoletas extends JFrame {
                 Cliente ana = new Cliente("Ana Perez", "1001");
                 bancoPrueba.agregarCliente(ana);
                 Cuenta cuentaPrueba = new Cuenta("C001", ana, 500000, 400000);
-                Tarjeta tarjetaPrueba = new Tarjeta("1111", "1234", ana);
+                Tarjeta tarjetaPrueba = new Tarjeta("1111", "1234", ana, 100000, 10000000);
                 cuentaPrueba.asignarTarjeta(tarjetaPrueba);
                 bancoPrueba.agregarCuenta(cuentaPrueba);
                 cajero = new Cajeroautomatico(bancoPrueba, 2000000);
@@ -250,9 +250,13 @@ public class VistaBoletas extends JFrame {
 
         Banco bancoPrueba = new Banco("Banco Demo");
         Cliente ana = new Cliente("Ana Perez", "1001");
+        Cliente luis = new Cliente("Luis Gomez", "1002");
         bancoPrueba.agregarCliente(ana);
         Cuenta cuentaPrueba = new Cuenta("C001", ana, 500000, 400000);
-        cuentaPrueba.asignarTarjeta(new Tarjeta("1111", "1234", ana));
+        cuentaPrueba.asignarTarjeta(new Tarjeta("1111", "1234", ana, 100000, 10000000));
+        cuentaPrueba.asignarTarjeta(new Tarjeta("3333", "5678", ana, 200000, 50000000));
+        cuentaPrueba.asignarTarjeta(new Tarjeta("5555", "9012", luis, 10000000, 10000000));
+
         bancoPrueba.agregarCuenta(cuentaPrueba);
         Cajeroautomatico cajeroPrueba = new Cajeroautomatico(bancoPrueba, 2000000);
 

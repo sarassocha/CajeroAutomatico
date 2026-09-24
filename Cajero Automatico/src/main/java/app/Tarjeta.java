@@ -26,14 +26,7 @@ public class Tarjeta {
         this.retiradoHoy = 0.0;
     }
 
-    public Tarjeta(String numero, String clave, Cliente propietario, double saldoInicial) {
-        this(numero, clave, propietario, saldoInicial, 2000000.0); // Límite por defecto
-    }
-
-    public Tarjeta(String numero, String clave, Cliente propietario) {
-        this(numero, clave, propietario, 0.0, 2000000.0);
-    }
-
+  
     public String getNumero() {
         return numero;
     }

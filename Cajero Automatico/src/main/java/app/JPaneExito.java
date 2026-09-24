@@ -10,8 +10,8 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 /**
- * Ventana de confirmación de operación exitosa.
- * Muestra el saldo consultado directamente desde la Tarjeta.
+ * Ventana de confirmación de operación exitosa. Muestra el saldo consultado
+ * directamente desde la Tarjeta.
  */
 public class JPaneExito extends JFrame {
 
@@ -19,7 +19,8 @@ public class JPaneExito extends JFrame {
     private String Exitomensaje;
 
     /**
-     * Constructor principal que recibe el mensaje de éxito y la Tarjeta correspondiente.
+     * Constructor principal que recibe el mensaje de éxito y la Tarjeta
+     * correspondiente.
      */
     public JPaneExito(String Exitomensaje, Tarjeta tarjeta) {
         initComponents();
@@ -68,18 +69,18 @@ public class JPaneExito extends JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(174, 174, 174)
-                .addComponent(jOptionPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(190, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(174, 174, 174)
+                                .addComponent(jOptionPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(190, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(98, 98, 98)
-                .addComponent(jOptionPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(112, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(98, 98, 98)
+                                .addComponent(jOptionPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(112, Short.MAX_VALUE))
         );
 
         pack();
@@ -98,10 +99,12 @@ public class JPaneExito extends JFrame {
         }
 
         Cliente clientePrueba = new Cliente("Ana Perez", "1001");
-        
-        Tarjeta tarjetaPrueba = new Tarjeta("1111", "1234", clientePrueba, 500000.0);
 
-        EventQueue.invokeLater(() -> new JPaneExito("¿Desea imprimir el recibo?", tarjetaPrueba).setVisible(true));
+        Cuenta cuentaCompartida = new Cuenta("C001", clientePrueba, 500000, 400000);
+
+        cuentaCompartida.asignarTarjeta(new Tarjeta("1111", "1234", clientePrueba, 100000, 10000000));
+
+        EventQueue.invokeLater(() -> new JPaneExito("¿Desea imprimir el recibo?", cuentaCompartida.getTarjeta()).setVisible(true));
     }
 
     // Variables declaration - do not modify                     

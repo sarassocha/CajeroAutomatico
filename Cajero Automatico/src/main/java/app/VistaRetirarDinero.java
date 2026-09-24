@@ -174,9 +174,9 @@ public class VistaRetirarDinero extends javax.swing.JFrame {
 
         cuentaCompartida.agregarTitular(luis);
 
-        cuentaCompartida.asignarTarjeta(new Tarjeta("1111", "1234", ana));
-        cuentaCompartida.asignarTarjeta(new Tarjeta("3333", "5678", ana));
-        cuentaCompartida.asignarTarjeta(new Tarjeta("5555", "9012", luis));
+        cuentaCompartida.asignarTarjeta(new Tarjeta("1111", "1234", ana, 100000, 10000000));
+        cuentaCompartida.asignarTarjeta(new Tarjeta("3333", "5678", ana, 200000, 50000000));
+        cuentaCompartida.asignarTarjeta(new Tarjeta("5555", "9012", luis, 10000000, 10000000));
 
         bancoPrueba.agregarCuenta(cuentaCompartida);
         Cajeroautomatico cajeroPrueba = new Cajeroautomatico(bancoPrueba, 2000000);
