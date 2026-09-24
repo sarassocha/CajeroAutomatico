@@ -33,26 +33,6 @@ public class VistaClave extends JFrame {
         this.cliente = cliente;
     }
 
-    /**
-     * Constructor secundario de conveniencia si solo se recibe la tarjeta.
-     */
-    public VistaClave(Cajeroautomatico cajero, String numeroTarjeta) {
-        this(cajero, numeroTarjeta, null);
-    }
-
-    /**
-     * Constructor por defecto para soporte de editores GUI (NetBeans UI
-     * Builder).
-     */
-    @Deprecated
-    public VistaClave() {
-        initComponents();
-        setLocationRelativeTo(null);
-        this.cajero = null;
-        this.numeroTarjeta = "";
-        this.cliente = null;
-    }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
@@ -234,8 +214,24 @@ public class VistaClave extends JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             LOGGER.log(Level.SEVERE, "Error al configurar el LookAndFeel", ex);
         }
+        Banco bancoPrueba = new Banco("Banco Demo");
+        Cliente ana = new Cliente("Ana Perez", "1001");
+        Cliente luis = new Cliente("Luis Gomez", "1002");
+        bancoPrueba.agregarCliente(ana);
+        bancoPrueba.agregarCliente(luis);
 
-        EventQueue.invokeLater(() -> new VistaClave().setVisible(true));
+        Cuenta cuentaCompartida = new Cuenta("C001", ana, 500000, 400000);
+
+        cuentaCompartida.agregarTitular(luis);
+
+        cuentaCompartida.asignarTarjeta(new Tarjeta("1111", "1234", ana, 100000, 10000000));
+        cuentaCompartida.asignarTarjeta(new Tarjeta("3333", "5678", ana, 200000, 50000000));
+        cuentaCompartida.asignarTarjeta(new Tarjeta("5555", "9012", luis, 10000000, 10000000));
+
+        bancoPrueba.agregarCuenta(cuentaCompartida);
+        Cajeroautomatico cajeroPrueba = new Cajeroautomatico(bancoPrueba, 2000000);
+
+        EventQueue.invokeLater(() -> new VistaClave(cajeroPrueba, cuentaCompartida.getNumeroCuenta(), ana).setVisible(true));
     }
 
     // Variables declaration - do not modify                     

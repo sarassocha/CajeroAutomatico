@@ -19,6 +19,7 @@ public class VistaRetirarDinero extends javax.swing.JFrame {
     private String numeroTarjeta;
     private String mensaje;
     private Tarjeta tarjeta;
+    private Cliente cliente;
 
     /**
      * Creates new form VistaRetirarDinero
@@ -29,12 +30,7 @@ public class VistaRetirarDinero extends javax.swing.JFrame {
         this.cajero = cajero;
         this.numeroTarjeta = numeroTarjeta;
         this.tarjeta = cajero.getBanco().buscarTarjetaPorNumero(numeroTarjeta);
-    }
-
-    public VistaRetirarDinero() {
-        initComponents();
-
-        this.numeroTarjeta = "1111"; // Valor por defecto para pruebas
+        this.cliente = tarjeta.getPropietario();
     }
 
     /**
@@ -138,7 +134,7 @@ public class VistaRetirarDinero extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        java.awt.EventQueue.invokeLater(() -> new VistaMenu(cajero, numeroTarjeta).setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new VistaMenu(cajero, numeroTarjeta, cliente).setVisible(true));
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 

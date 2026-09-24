@@ -30,10 +30,6 @@ public class VistaTarjeta extends javax.swing.JFrame {
         }
     }
 
-    public VistaTarjeta() {
-        initComponents();
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -155,8 +151,7 @@ public class VistaTarjeta extends javax.swing.JFrame {
         }
 
         String numeroTarjeta = numeroIngresado;
-        // Pasa tanto la tarjeta como el cajero o cliente a VistaClave para conservar el contexto
-        java.awt.EventQueue.invokeLater(() -> new VistaClave(cajero, numeroTarjeta).setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new VistaClave(cajero, numeroTarjeta, clienteActual).setVisible(true));
         this.dispose();
     }
 
@@ -188,9 +183,25 @@ public class VistaTarjeta extends javax.swing.JFrame {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         // </editor-fold>
+        Banco bancoPrueba = new Banco("Banco Demo");
+        Cliente ana = new Cliente("Ana Perez", "1001");
+        Cliente luis = new Cliente("Luis Gomez", "1002");
+        bancoPrueba.agregarCliente(ana);
+        bancoPrueba.agregarCliente(luis);
+
+        Cuenta cuentaCompartida = new Cuenta("C001", ana, 500000, 400000);
+
+        cuentaCompartida.agregarTitular(luis);
+
+        cuentaCompartida.asignarTarjeta(new Tarjeta("1111", "1234", ana, 100000, 10000000));
+        cuentaCompartida.asignarTarjeta(new Tarjeta("3333", "5678", ana, 200000, 50000000));
+        cuentaCompartida.asignarTarjeta(new Tarjeta("5555", "9012", luis, 10000000, 10000000));
+
+        bancoPrueba.agregarCuenta(cuentaCompartida);
+        Cajeroautomatico cajeroPrueba = new Cajeroautomatico(bancoPrueba, 2000000);
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new VistaTarjeta().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new VistaTarjeta(cajeroPrueba, ana).setVisible(true));
     }
 
     // Variables declaration - do not modify

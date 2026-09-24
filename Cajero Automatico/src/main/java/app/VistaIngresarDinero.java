@@ -17,6 +17,7 @@ public class VistaIngresarDinero extends javax.swing.JFrame {
     private String numeroTarjeta;
     private String mensaje;
     private Tarjeta tarjeta;
+    private Cliente cliente;
 
     /**
      * Creates new form VistaIngresarDinero
@@ -27,13 +28,7 @@ public class VistaIngresarDinero extends javax.swing.JFrame {
         this.cajero = cajero;
         this.numeroTarjeta = numeroTarjeta;
         this.tarjeta = cajero.getBanco().buscarTarjetaPorNumero(numeroTarjeta);
-    }
-
-    public VistaIngresarDinero() {
-        initComponents();
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        this.numeroTarjeta = "1111"; // Valor por defecto para pruebas
+        this.cliente = tarjeta.getPropietario();
     }
 
     /**
@@ -128,7 +123,7 @@ public class VistaIngresarDinero extends javax.swing.JFrame {
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        java.awt.EventQueue.invokeLater(() -> new VistaMenu(cajero, numeroTarjeta).setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new VistaMenu(cajero, numeroTarjeta, cliente).setVisible(true));
         dispose();
     }
 

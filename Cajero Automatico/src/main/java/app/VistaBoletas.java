@@ -22,35 +22,6 @@ public class VistaBoletas extends JFrame {
     private String mensaje;
 
     /**
-     * Constructor con número de tarjeta.
-     *
-     * @param numeroTarjeta Identificador de la tarjeta utilizada.
-     */
-    public VistaBoletas(String numeroTarjeta) {
-        initComponents();
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        this.numeroTarjeta = numeroTarjeta;
-        inicializarEventos();
-    }
-
-    /**
-     * Constructor con cajero y número de tarjeta.
-     *
-     * @param cajero Instancia del cajero automático.
-     * @param numeroTarjeta Identificador de la tarjeta.
-     */
-    public VistaBoletas(Cajeroautomatico cajero, String numeroTarjeta) {
-        initComponents();
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        this.cajero = cajero;
-        this.numeroTarjeta = numeroTarjeta;
-        if (cajero != null && cajero.getBanco() != null) {
-            this.tarjeta = cajero.getBanco().buscarTarjetaPorNumero(numeroTarjeta);
-        }
-        inicializarEventos();
-    }
-
-    /**
      * Constructor completo con sesión de cliente.
      *
      * @param cajero Instancia del cajero automático.
@@ -66,16 +37,6 @@ public class VistaBoletas extends JFrame {
         if (cajero != null && cajero.getBanco() != null) {
             this.tarjeta = cajero.getBanco().buscarTarjetaPorNumero(numeroTarjeta);
         }
-        inicializarEventos();
-    }
-
-    /**
-     * Constructor por defecto para pruebas y diseñador GUI.
-     */
-    public VistaBoletas() {
-        initComponents();
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        this.numeroTarjeta = "1111";
         inicializarEventos();
     }
 
@@ -229,7 +190,7 @@ public class VistaBoletas extends JFrame {
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-        java.awt.EventQueue.invokeLater(() -> new VistaMenu(cajero, numeroTarjeta).setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new VistaMenu(cajero, numeroTarjeta, cliente).setVisible(true));
         dispose();
     }
 
